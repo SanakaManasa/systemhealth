@@ -1,0 +1,48 @@
+Commands Explanation
+This file provides an explanation of the key commands used in the System Health Monitoring Script (sys_health.sh), which checks CPU, memory, disk usage, and lists top CPU-consuming processes on a Windows system.
+
+1. cmd.exe /c "wmic cpu get loadpercentage"
+Purpose: Retrieves the CPU load percentage (current CPU usage).
+Explanation:
+cmd.exe: This runs the Command Prompt (cmd) on a Windows system.
+/c: This argument tells Command Prompt to execute the command that follows it and then terminate.
+"wmic cpu get loadpercentage": This command uses WMIC (Windows Management Instrumentation Command-line) to fetch the CPU usage in percentage.
+awk 'NR==2 {print $1}': This awk command filters out the first line (header) and gets the CPU load percentage from the second line.
+2. cmd.exe /c "wmic OS get FreePhysicalMemory,TotalVisibleMemorySize"
+Purpose: Retrieves the free and total physical memory (RAM) available on the system.
+Explanation:
+cmd.exe: Executes the Command Prompt (cmd) on Windows.
+/c: Tells Command Prompt to execute the command that follows it.
+"wmic OS get FreePhysicalMemory,TotalVisibleMemorySize": Uses WMIC to get memory details like the total visible memory and free physical memory.
+awk '{print $2}' and awk '{print $1}': These commands use awk to extract the second column (total memory) and first column (free memory) from the output.
+3. cmd.exe /c "wmic logicaldisk get size,freespace,caption"
+Purpose: Retrieves information about disk size, free space, and disk drive caption.
+Explanation:
+cmd.exe: Executes the Command Prompt (cmd).
+/c: Tells Command Prompt to run the following command.
+"wmic logicaldisk get size,freespace,caption": Uses WMIC to fetch disk information like total disk size, free space, and disk caption (i.e., drive letter or name).
+awk '{print $2}' and awk '{print $1}': Extracts the disk size and free space details using awk.
+4. cmd.exe /c "tasklist /fo csv"
+Purpose: Lists all running processes with their resource usage in CSV format.
+Explanation:
+cmd.exe: Runs Command Prompt (cmd) in Windows.
+/c: Executes the given command and then terminates the session.
+"tasklist /fo csv": Uses tasklist to list all running processes in a CSV (Comma Separated Values) format. This includes information such as memory usage, process name, and more.
+head -6: Limits the output to the top 5 processes (the first 6 lines of CSV data, including the header).
+5. echo "$(date): <message>" >> $LOGFILE
+Purpose: Logs messages to a file with a timestamp.
+Explanation:
+$(date): This command gets the current date and time when the script is executed.
+echo "<message>": Prints the specified message (e.g., CPU, memory usage).
+>> $LOGFILE: Appends the message to the log file specified by $LOGFILE (i.e., sys_health.log).
+6. awk 'NR==2 {print $1}'
+Purpose: Filters and extracts specific columns from command output.
+Explanation:
+awk: This is a text-processing tool that allows you to manipulate and extract columns from a data stream.
+NR==2: Refers to the second line in the output. NR is the line number.
+{print $1}: Prints the first field (column) of the second line. For example, in CPU usage, it prints the value of load percentage.
+7. head -6
+Purpose: Displays the first 6 lines of input.
+Explanation:
+head: A command used to display the top lines of a file or output.
+-6: This flag limits the output to the first 6 lines, which includes the top 5 CPU-consuming processes and the header.
